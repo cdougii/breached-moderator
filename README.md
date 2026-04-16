@@ -21,7 +21,7 @@ A web-based night phase moderation app for the Breached card game. This app help
 
 ## How to Use
 
-1. Open `index.html` in a web browser
+1. Open `public/index.html` in a web browser
 2. Select which roles are in the game
 3. Click "Start Night Phase"
 4. Navigate through each role's turn
