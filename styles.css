@@ -1,0 +1,623 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+    background: #0a0a0f;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 255, 0, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 0, 100, 0.05) 0%, transparent 50%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00ffcc;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 255, 0.03) 2px,
+            rgba(0, 255, 255, 0.03) 4px
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.screen.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: rgba(10, 15, 25, 0.95);
+    border: 2px solid #00ffcc;
+    border-radius: 8px;
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 204, 0.3),
+        0 0 40px rgba(0, 255, 204, 0.1),
+        inset 0 0 20px rgba(0, 255, 204, 0.05);
+    animation: fadeIn 0.5s ease-in, pulseGlow 3s ease-in-out infinite;
+    position: relative;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #00ffcc, #00ff00, #ff0066, #00ffcc);
+    border-radius: 8px;
+    z-index: -1;
+    opacity: 0.3;
+    animation: borderPulse 4s ease-in-out infinite;
+}
+
+@keyframes borderPulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(0, 255, 204, 0.3),
+            0 0 40px rgba(0, 255, 204, 0.1),
+            inset 0 0 20px rgba(0, 255, 204, 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(0, 255, 204, 0.5),
+            0 0 60px rgba(0, 255, 204, 0.2),
+            inset 0 0 20px rgba(0, 255, 204, 0.1);
+    }
+}
+
+@keyframes textGlow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.4);
+    }
+    50% {
+        text-shadow: 0 0 15px rgba(0, 255, 204, 1), 0 0 30px rgba(0, 255, 204, 0.6), 0 0 40px rgba(0, 255, 204, 0.3);
+    }
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #00ffcc;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.4);
+    animation: textGlow 3s ease-in-out infinite;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    color: #00ff99;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(0, 255, 153, 0.6);
+    letter-spacing: 2px;
+}
+
+/* Role Selection Screen */
+.role-selection-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.role-checkbox {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(0, 255, 204, 0.05);
+    position: relative;
+}
+
+.role-checkbox::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 204, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 4px;
+}
+
+.role-checkbox:hover {
+    border-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+}
+
+.role-checkbox:hover::before {
+    opacity: 1;
+}
+
+.role-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    cursor: pointer;
+    accent-color: #00ffcc;
+    filter: drop-shadow(0 0 5px rgba(0, 255, 204, 0.5));
+}
+
+.role-checkbox input[type="checkbox"]:checked + .role-label {
+    color: #00ffcc;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0, 255, 204, 0.8);
+}
+
+.role-checkbox:has(input[type="checkbox"]:checked) {
+    border-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.15);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4), inset 0 0 10px rgba(0, 255, 204, 0.1);
+}
+
+.role-checkbox:has(input[type="checkbox"]:checked)::before {
+    opacity: 1;
+}
+
+.role-label {
+    font-size: 1.1em;
+    color: #00ff99;
+    cursor: pointer;
+    user-select: none;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Buttons */
+.btn {
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border: 2px solid #00ffcc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Courier New', monospace;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 255, 204, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background: rgba(0, 255, 204, 0.1);
+    color: #00ffcc;
+    width: 100%;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(0, 255, 204, 0.6), 0 4px 15px rgba(0, 255, 204, 0.4);
+    background: rgba(0, 255, 204, 0.2);
+    border-color: #00ff99;
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: rgba(255, 0, 100, 0.1);
+    color: #ff0066;
+    width: 100%;
+    margin-top: 15px;
+    border-color: #ff0066;
+    text-shadow: 0 0 10px rgba(255, 0, 100, 0.8);
+    box-shadow: 0 0 15px rgba(255, 0, 100, 0.3);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 0, 100, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(255, 0, 100, 0.6), 0 4px 15px rgba(255, 0, 100, 0.4);
+}
+
+/* Night Phase Screen */
+.progress-indicator {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #00ff99;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
+    letter-spacing: 2px;
+}
+
+.current-role-display {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: rgba(0, 255, 204, 0.1);
+    border: 2px solid #00ffcc;
+    border-radius: 8px;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 204, 0.4),
+        inset 0 0 30px rgba(0, 255, 204, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.current-role-display.has-human-team {
+    background: rgba(0, 204, 255, 0.1);
+    border-color: #00ccff;
+    box-shadow: 
+        0 0 30px rgba(0, 204, 255, 0.4),
+        inset 0 0 30px rgba(0, 204, 255, 0.1);
+}
+
+.current-role-display.has-alien-team {
+    background: rgba(255, 0, 102, 0.1);
+    border-color: #ff0066;
+    box-shadow: 
+        0 0 30px rgba(255, 0, 102, 0.4),
+        inset 0 0 30px rgba(255, 0, 102, 0.1);
+}
+
+.current-role-display::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 204, 0.1), transparent);
+    animation: scanLine 3s linear infinite;
+}
+
+.current-role-display.has-human-team::before {
+    background: linear-gradient(45deg, transparent, rgba(0, 204, 255, 0.1), transparent);
+}
+
+.current-role-display.has-alien-team::before {
+    background: linear-gradient(45deg, transparent, rgba(255, 0, 102, 0.1), transparent);
+}
+
+@keyframes scanLine {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.role-name {
+    font-size: 3em;
+    color: #00ffcc;
+    text-shadow: 
+        0 0 10px rgba(0, 255, 204, 1),
+        0 0 20px rgba(0, 255, 204, 0.6),
+        0 0 30px rgba(0, 255, 204, 0.3);
+    margin: 0;
+    letter-spacing: 4px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+.role-name.team-human {
+    color: #00ccff;
+    text-shadow: 
+        0 0 10px rgba(0, 204, 255, 1),
+        0 0 20px rgba(0, 204, 255, 0.6),
+        0 0 30px rgba(0, 204, 255, 0.3);
+}
+
+.role-name.team-alien {
+    color: #ff0066;
+    text-shadow: 
+        0 0 10px rgba(255, 0, 102, 1),
+        0 0 20px rgba(255, 0, 102, 0.6),
+        0 0 30px rgba(255, 0, 102, 0.3);
+}
+
+.instruction-display {
+    background: rgba(0, 20, 30, 0.8);
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 30px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    box-shadow: 
+        inset 0 0 20px rgba(0, 255, 204, 0.1),
+        0 0 15px rgba(0, 255, 204, 0.2);
+    position: relative;
+}
+
+.instruction-display::after {
+    content: '>';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #00ffcc;
+    font-size: 1.2em;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.instruction-text {
+    font-size: 1.4em;
+    line-height: 1.8;
+    color: #00ff99;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(0, 255, 153, 0.6);
+    letter-spacing: 1px;
+    padding-left: 30px;
+}
+
+.navigation-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Day Phase Screen */
+.day-phase-title {
+    font-size: 3em;
+    color: #00ffcc;
+    text-align: center;
+    text-shadow: 
+        0 0 10px rgba(0, 255, 204, 1),
+        0 0 20px rgba(0, 255, 204, 0.6),
+        0 0 30px rgba(0, 255, 204, 0.3);
+    margin-bottom: 40px;
+    letter-spacing: 4px;
+    font-weight: bold;
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+.team-selection-container {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: rgba(0, 20, 30, 0.5);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    border-radius: 8px;
+    box-shadow: 
+        inset 0 0 20px rgba(0, 255, 204, 0.1),
+        0 0 15px rgba(0, 255, 204, 0.2);
+}
+
+.team-selection-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #00ff99;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(0, 255, 153, 0.6);
+    letter-spacing: 2px;
+}
+
+.team-toggles {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.team-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.team-toggle input[type="checkbox"] {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute;
+}
+
+.team-toggle-label {
+    display: inline-block;
+    padding: 15px 30px;
+    border: 2px solid;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.1em;
+    min-width: 120px;
+    text-align: center;
+    user-select: none;
+}
+
+.team-human-label {
+    color: #00ccff;
+    border-color: #00ccff;
+    background: rgba(0, 204, 255, 0.1);
+    text-shadow: 0 0 10px rgba(0, 204, 255, 0.8);
+    box-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
+}
+
+.team-human-label:hover {
+    background: rgba(0, 204, 255, 0.2);
+    box-shadow: 0 0 25px rgba(0, 204, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.team-toggle input[type="checkbox"]:checked + .team-human-label {
+    background: rgba(0, 204, 255, 0.3);
+    box-shadow: 
+        0 0 25px rgba(0, 204, 255, 0.6),
+        inset 0 0 15px rgba(0, 204, 255, 0.2);
+    text-shadow: 0 0 15px rgba(0, 204, 255, 1);
+}
+
+.team-alien-label {
+    color: #ff0066;
+    border-color: #ff0066;
+    background: rgba(255, 0, 102, 0.1);
+    text-shadow: 0 0 10px rgba(255, 0, 102, 0.8);
+    box-shadow: 0 0 15px rgba(255, 0, 102, 0.3);
+}
+
+.team-alien-label:hover {
+    background: rgba(255, 0, 102, 0.2);
+    box-shadow: 0 0 25px rgba(255, 0, 102, 0.5);
+    transform: translateY(-2px);
+}
+
+.team-toggle input[type="checkbox"]:checked + .team-alien-label {
+    background: rgba(255, 0, 102, 0.3);
+    box-shadow: 
+        0 0 25px rgba(255, 0, 102, 0.6),
+        inset 0 0 15px rgba(255, 0, 102, 0.2);
+    text-shadow: 0 0 15px rgba(255, 0, 102, 1);
+}
+
+.team-note {
+    text-align: center;
+    color: #00ff99;
+    font-size: 0.9em;
+    text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
+    font-style: italic;
+    margin-top: 15px;
+}
+
+.day-phase-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+        letter-spacing: 2px;
+    }
+
+    .role-name {
+        font-size: 2em;
+        letter-spacing: 2px;
+    }
+
+    .instruction-text {
+        font-size: 1.2em;
+    }
+
+    .role-selection-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Scrollbar Styling */
+.role-selection-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.role-selection-container::-webkit-scrollbar-track {
+    background: rgba(0, 255, 204, 0.1);
+    border-radius: 10px;
+}
+
+.role-selection-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 204, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.role-selection-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 204, 0.8);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.8);
+}

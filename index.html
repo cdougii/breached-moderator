@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breached - Night Phase Moderation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Role Selection Screen -->
+    <div id="role-selection-screen" class="screen active">
+        <div class="container">
+            <h1>Breached - Night Phase</h1>
+            <h2>Select Roles</h2>
+            <div id="role-selection-container" class="role-selection-container">
+                <!-- Roles will be dynamically generated here -->
+            </div>
+            <button id="start-night-phase-btn" class="btn btn-primary" disabled>
+                Start Night Phase
+            </button>
+        </div>
+    </div>
+
+    <!-- Night Phase Screen -->
+    <div id="night-phase-screen" class="screen">
+        <div class="container">
+            <div id="progress-indicator" class="progress-indicator">
+                <!-- Progress text will be dynamically updated -->
+            </div>
+            
+            <div id="current-role-display" class="current-role-display">
+                <h1 id="role-name" class="role-name"></h1>
+            </div>
+            
+            <div id="instruction-display" class="instruction-display">
+                <p id="instruction-text" class="instruction-text"></p>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button id="next-role-btn" class="btn btn-primary">
+                    Next Role
+                </button>
+                <button id="end-night-phase-btn" class="btn btn-secondary" style="display: none;">
+                    End Night Phase
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Phase Screen -->
+    <div id="day-phase-screen" class="screen">
+        <div class="container">
+            <h1 id="day-phase-title" class="day-phase-title">Find Your Friends</h1>
+            
+            <div class="team-selection-container">
+                <h2>Select Teams Acting Tonight</h2>
+                <div class="team-toggles">
+                    <div class="team-toggle">
+                        <input type="checkbox" id="human-team-toggle" checked>
+                        <label for="human-team-toggle" class="team-toggle-label team-human-label">Human</label>
+                    </div>
+                    <div class="team-toggle">
+                        <input type="checkbox" id="alien-team-toggle" checked>
+                        <label for="alien-team-toggle" class="team-toggle-label team-alien-label">Alien</label>
+                    </div>
+                </div>
+                <p class="team-note">Note: Both Captains will always act regardless of selection.</p>
+            </div>
+            
+            <div class="day-phase-buttons">
+                <button id="start-night-phase-from-day-btn" class="btn btn-primary">
+                    Start Night Phase
+                </button>
+                <button id="new-game-btn" class="btn btn-secondary">
+                    New Game
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
