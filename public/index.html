@@ -7,6 +7,72 @@
     <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
+    <!-- Settings Button (available on all screens) -->
+    <button id="settings-btn" class="btn btn-secondary settings-btn" type="button">
+        ⚙
+    </button>
+
+    <!-- Close Eyes Overlay -->
+    <div id="close-eyes-overlay" class="close-eyes-overlay" aria-live="polite" aria-hidden="true">
+        <div class="close-eyes-card">
+            <h2>Close Your Eyes</h2>
+            <p>Please wait...</p>
+        </div>
+    </div>
+
+    <!-- Wake Up Overlay -->
+    <div id="wake-up-overlay" class="wake-up-overlay" aria-live="polite" aria-hidden="true">
+        <div class="wake-up-card">
+            <h2>Everyone Wake Up</h2>
+            <p>Day phase begins.</p>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="settings-modal-overlay" aria-hidden="true">
+        <div class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+            <div class="settings-modal-header">
+                <h2 id="settings-title">Settings</h2>
+            </div>
+
+            <div class="settings-field">
+                <div class="settings-label-row">
+                    <label for="sfx-volume">SFX Volume</label>
+                    <span id="sfx-volume-value" class="settings-value"></span>
+                </div>
+                <input id="sfx-volume" type="range" min="0" max="100" step="1" />
+            </div>
+
+            <div class="settings-field">
+                <div class="settings-label-row">
+                    <label for="music-volume">Music Volume</label>
+                    <span id="music-volume-value" class="settings-value"></span>
+                </div>
+                <input id="music-volume" type="range" min="0" max="100" step="1" />
+                <p class="settings-help">
+                    Optional: if you add <code>background_music.mp3</code> to <code>public/assets/audio/</code>, music will play at night start.
+                </p>
+            </div>
+
+            <div class="settings-field">
+                <div class="settings-label-row">
+                    <label for="autoplay-seconds">Autoplay Timer (seconds)</label>
+                    <span id="autoplay-seconds-value" class="settings-value"></span>
+                </div>
+                <input id="autoplay-seconds" type="range" min="10" max="120" step="5" />
+            </div>
+
+            <div class="settings-actions">
+                <button id="save-settings-btn" class="btn btn-primary" type="button">
+                    Save
+                </button>
+                <button id="close-settings-btn" class="btn btn-secondary" type="button">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Role Selection Screen -->
     <div id="role-selection-screen" class="screen active">
         <div class="container">
@@ -27,6 +93,8 @@
             <div id="progress-indicator" class="progress-indicator">
                 <!-- Progress text will be dynamically updated -->
             </div>
+
+            <div id="role-timer" class="role-timer" aria-live="polite"></div>
             
             <div id="current-role-display" class="current-role-display">
                 <h1 id="role-name" class="role-name"></h1>
