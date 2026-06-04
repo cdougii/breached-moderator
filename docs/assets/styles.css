@@ -779,12 +779,6 @@ h2 {
     box-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
 }
 
-.team-human-label:hover {
-    background: rgba(0, 204, 255, 0.2);
-    box-shadow: 0 0 25px rgba(0, 204, 255, 0.5);
-    transform: translateY(-2px);
-}
-
 .team-toggle input[type="checkbox"]:checked + .team-human-label {
     background: rgba(0, 204, 255, 0.3);
     box-shadow: 
@@ -799,12 +793,6 @@ h2 {
     background: rgba(255, 0, 102, 0.1);
     text-shadow: 0 0 10px rgba(255, 0, 102, 0.8);
     box-shadow: 0 0 15px rgba(255, 0, 102, 0.3);
-}
-
-.team-alien-label:hover {
-    background: rgba(255, 0, 102, 0.2);
-    box-shadow: 0 0 25px rgba(255, 0, 102, 0.5);
-    transform: translateY(-2px);
 }
 
 .team-toggle input[type="checkbox"]:checked + .team-alien-label {
