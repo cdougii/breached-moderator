@@ -744,35 +744,41 @@ h2 {
 }
 
 .team-human-label {
-    color: #00ccff;
-    border-color: #00ccff;
-    background: rgba(0, 204, 255, 0.1);
-    text-shadow: 0 0 10px rgba(0, 204, 255, 0.8);
-    box-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
+    color: #777;
+    border-color: #777;
+    background: rgba(120, 120, 120, 0.08);
+    text-shadow: none;
+    box-shadow: none;
 }
 
 .team-toggle input[type="checkbox"]:checked + .team-human-label {
+    color: #00ccff;
+    border-color: #00ccff;
     background: rgba(0, 204, 255, 0.3);
-    box-shadow: 
+
+    text-shadow: 0 0 10px rgba(0, 204, 255, 1);
+    box-shadow:
         0 0 25px rgba(0, 204, 255, 0.6),
         inset 0 0 15px rgba(0, 204, 255, 0.2);
-    text-shadow: 0 0 15px rgba(0, 204, 255, 1);
 }
 
 .team-alien-label {
-    color: #ff0066;
-    border-color: #ff0066;
-    background: rgba(255, 0, 102, 0.1);
-    text-shadow: 0 0 10px rgba(255, 0, 102, 0.8);
-    box-shadow: 0 0 15px rgba(255, 0, 102, 0.3);
+    color: #777;
+    border-color: #777;
+    background: rgba(120, 120, 120, 0.08);
+    text-shadow: none;
+    box-shadow: none;
 }
 
 .team-toggle input[type="checkbox"]:checked + .team-alien-label {
+    color: #ff0066;
+    border-color: #ff0066;
     background: rgba(255, 0, 102, 0.3);
-    box-shadow: 
+
+    text-shadow: 0 0 10px rgba(255, 0, 102, 1);
+    box-shadow:
         0 0 25px rgba(255, 0, 102, 0.6),
         inset 0 0 15px rgba(255, 0, 102, 0.2);
-    text-shadow: 0 0 15px rgba(255, 0, 102, 1);
 }
 
 .team-note {
