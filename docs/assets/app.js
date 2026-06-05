@@ -407,6 +407,11 @@ function filterNightPhaseRoles() {
     });
 }
 
+function setTeam(container, team) {
+    container.classList.remove('has-human-team', 'has-alien-team');
+    container.classList.add(`has-${team.toLowerCase()}-team`);
+}
+
 // Show current role and instructions
 function showCurrentRole() {
     if (currentRoleIndex >= nightPhaseRoles.length) {
@@ -424,7 +429,7 @@ function showCurrentRole() {
     
     // Update role display container with team class
     const roleDisplayContainer = document.getElementById('current-role-display');
-    roleDisplayContainer.classList.add(`has-${currentRole.team.toLowerCase()}-team`);
+    setTeam(roleDisplayContainer, currentRole.team);
     
     // Update instructions with team context
     instructionTextDisplay.textContent = `[${currentRole.team} Team]\n\n${currentRole.instructions}`;
