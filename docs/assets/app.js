@@ -432,7 +432,7 @@ function showCurrentRole() {
     setTeam(roleDisplayContainer, currentRole.team);
     
     // Update instructions with team context
-    instructionTextDisplay.textContent = `[${currentRole.team} Team]\n\n${currentRole.instructions}`;
+    instructionTextDisplay.textContent = currentRole.instructions;
     
     // Show/hide buttons based on position
     if (currentRoleIndex === nightPhaseRoles.length - 1) {
