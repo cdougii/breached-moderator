@@ -59,6 +59,8 @@ const newGameBtn = document.getElementById('new-game-btn');
 const humanTeamToggle = document.getElementById('human-team-toggle');
 const alienTeamToggle = document.getElementById('alien-team-toggle');
 const roleTimerDisplay = document.getElementById('role-timer');
+const roleTeamDisplay = document.getElementById('role-team');
+const roleTitleDisplay = document.getElementById('role-title');
 
 // Settings UI
 const settingsBtn = document.getElementById('settings-btn');
@@ -417,15 +419,11 @@ function showCurrentRole() {
     progressIndicator.textContent = `Role ${currentRoleIndex + 1} of ${nightPhaseRoles.length}`;
     
     // Update role name with team indicator
-    roleNameDisplay.textContent = `${currentRole.name} - ${currentRole.team}`;
-    
-    // Add team class for styling
-    roleNameDisplay.className = 'role-name';
-    roleNameDisplay.classList.add(`team-${currentRole.team.toLowerCase()}`);
+    roleTeamDisplay.textContent = currentRole.team;
+    roleTitleDisplay.textContent = currentRole.name;
     
     // Update role display container with team class
     const roleDisplayContainer = document.getElementById('current-role-display');
-    roleDisplayContainer.className = 'current-role-display';
     roleDisplayContainer.classList.add(`has-${currentRole.team.toLowerCase()}-team`);
     
     // Update instructions with team context
