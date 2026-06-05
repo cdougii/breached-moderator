@@ -260,7 +260,7 @@ body::after {
 
 .logo {
     height: auto;
-    width: 50%;
+     width: clamp(140px, 50%, 320px);
     display: block;
     margin: 0 auto 15px;
     position: relative;
