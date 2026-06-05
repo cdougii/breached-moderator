@@ -308,22 +308,24 @@ function renderRoleSelection() {
     roleSelectionContainer.innerHTML = '';
     
     roles.forEach((role, index) => {
-        const roleCheckbox = document.createElement('div');
+
+        // 🔥 CHANGE: label is now the container
+        const roleCheckbox = document.createElement('label');
         roleCheckbox.className = 'role-checkbox';
-        
+
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.id = `role-${index}`;
         checkbox.value = role.name;
         checkbox.addEventListener('change', handleRoleSelection);
-        
-        const label = document.createElement('label');
-        label.className = 'role-label';
-        label.htmlFor = `role-${index}`;
-        label.textContent = role.name;
-        
+
+        const text = document.createElement('span');
+        text.className = 'role-label';
+        text.textContent = role.name;
+
         roleCheckbox.appendChild(checkbox);
-        roleCheckbox.appendChild(label);
+        roleCheckbox.appendChild(text);
+
         roleSelectionContainer.appendChild(roleCheckbox);
     });
 }
