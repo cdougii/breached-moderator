@@ -246,6 +246,26 @@ body::after {
     margin-top: 18px;
 }
 
+@keyframes logoPulse {
+    0% {
+        filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.4));
+    }
+    50% {
+        filter: drop-shadow(0 0 3px rgba(0, 255, 204, 0.9));
+    }
+    100% {
+        filter: drop-shadow(0 0 3px rgba(0, 255, 204, 0.4));
+    }
+}
+
+.logo {
+    height: auto;
+    width: 50%;
+    display: block;
+    margin: 0 auto 15px;
+    position: relative;
+       animation: logoPulse 4.2s ease-in-out infinite;
+}
 .container {
     background:
         /* subtle panel dirt */
