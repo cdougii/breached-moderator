@@ -99,6 +99,7 @@ body::after {
     display: grid;
     place-items: center;
     line-height: 1;
+    font-family: Arial, sans-serif;
     font-size: 18px;
     letter-spacing: 0;
     text-transform: none;
