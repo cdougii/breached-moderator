@@ -260,11 +260,11 @@ body::after {
 
 .logo {
     height: auto;
-     width: clamp(200px, 50%, 320px);
+    width: min(70vw, 320px);
     display: block;
     margin: 0 auto 15px;
     position: relative;
-       animation: logoPulse 4.2s ease-in-out infinite;
+    animation: logoPulse 4.2s ease-in-out infinite;
 }
 .container {
     background:
