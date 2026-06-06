@@ -42,6 +42,7 @@ const AUDIO_FILES = {
 
 const MUSIC_FILE = 'background_music.mp3';
 let backgroundMusicAudio = null;
+let audioUnlocked = false;
 
 // DOM Elements
 const roleSelectionScreen = document.getElementById('role-selection-screen');
@@ -272,6 +273,7 @@ async function maybePlayBackgroundMusic() {
     // Only attempt playback if the user has set a non-zero music volume.
     if (settings.musicVolume <= 0) return;
 
+
     try {
         if (!backgroundMusicAudio) {
             backgroundMusicAudio = new Audio(buildAudioUrl(MUSIC_FILE));
@@ -294,6 +296,39 @@ function initializeApp() {
     renderRoleSelection();
     setupEventListeners();
     updateSettingsUi();
+}
+
+// Some mobile browsers block audio playback unless initiated by a user gesture.
+// Unlock audio playback by performing a one-time, silent user-initiated play
+// when the user first interacts with the page (touch/click). This ensures
+// later timer-driven audio.play() calls are allowed.
+function unlockAudioOnUserGesture() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+
+    try {
+        const a = new Audio(buildAudioUrl(AUDIO_FILES.nightStart));
+        a.preload = 'auto';
+        setVolumeOnAudioElement(a, 0);
+
+        const p = a.play();
+        if (p && typeof p.then === 'function') {
+            p.then(() => {
+                try { a.pause(); a.currentTime = 0; } catch {}
+            }).catch(() => {
+                try { a.pause(); a.currentTime = 0; } catch {}
+            });
+        }
+    } catch {
+        // ignore
+    }
+
+    try {
+        document.removeEventListener('touchstart', unlockAudioOnUserGesture, { passive: true });
+    } catch {}
+    try {
+        document.removeEventListener('click', unlockAudioOnUserGesture);
+    } catch {}
 }
 
 // Initialize roles (can be expanded to load from JSON or API)
@@ -654,6 +689,9 @@ function handleTeamToggle(event) {
 
 // Setup event listeners
 function setupEventListeners() {
+    // Register a one-time user gesture to unlock audio on mobile browsers
+    try { document.addEventListener('touchstart', unlockAudioOnUserGesture, { passive: true }); } catch {}
+    try { document.addEventListener('click', unlockAudioOnUserGesture); } catch {}
     startNightPhaseBtn.addEventListener('click', startNightPhase);
     nextRoleBtn.addEventListener('click', nextRole);
     endNightPhaseBtn.addEventListener('click', endNightPhaseFromButton);
