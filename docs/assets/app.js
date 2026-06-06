@@ -43,6 +43,8 @@ const AUDIO_FILES = {
 const MUSIC_FILE = 'background_music.mp3';
 let backgroundMusicAudio = null;
 let audioUnlocked = false;
+let audioContext = null;
+const cachedAudioElements = new Map();
 
 // DOM Elements
 const roleSelectionScreen = document.getElementById('role-selection-screen');
@@ -205,6 +207,20 @@ function getRoleAudioCandidates(roleName, team) {
     return candidates;
 }
 
+function getCachedAudioElement(filename) {
+    const key = filename.toLowerCase();
+    if (cachedAudioElements.has(key)) {
+        return cachedAudioElements.get(key);
+    }
+
+    const audio = new Audio(buildAudioUrl(filename));
+    audio.preload = 'auto';
+    audio.playsInline = true;
+    audio.volume = clamp01(settings.sfxVolume);
+    cachedAudioElements.set(key, audio);
+    return audio;
+}
+
 async function playAudioFile(filename) {
     if (!filename) return false;
 
@@ -222,9 +238,10 @@ async function playAudioFile(filename) {
 
     try {
         for (const candidate of candidates) {
-            const audio = new Audio(buildAudioUrl(candidate));
-            audio.preload = 'auto';
+            const audio = getCachedAudioElement(candidate);
             setVolumeOnAudioElement(audio, settings.sfxVolume);
+            audio.pause();
+            audio.currentTime = 0;
 
             try {
                 await new Promise((resolve, reject) => {
@@ -238,13 +255,15 @@ async function playAudioFile(filename) {
                 });
 
                 return true;
-            } catch {
+            } catch (err) {
+                console.log('playAudioFile failed for', candidate, err);
                 // Try the next candidate file name.
             }
         }
 
         return false;
-    } catch {
+    } catch (err) {
+        console.log('playAudioFile unexpected failure', err);
         return false;
     }
 }
@@ -304,32 +323,65 @@ function initializeApp() {
 // later timer-driven audio.play() calls are allowed.
 function unlockAudioOnUserGesture() {
     if (audioUnlocked) return;
-    audioUnlocked = true;
 
+    // Try to resume or create an AudioContext (helps iOS/Safari)
     try {
-        const a = new Audio(buildAudioUrl(AUDIO_FILES.nightStart));
-        a.preload = 'auto';
-        setVolumeOnAudioElement(a, 0);
-
-        const p = a.play();
-        if (p && typeof p.then === 'function') {
-            p.then(() => {
-                try { a.pause(); a.currentTime = 0; } catch {}
-            }).catch(() => {
-                try { a.pause(); a.currentTime = 0; } catch {}
-            });
+        if (!audioContext) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (AC) audioContext = new AC();
         }
-    } catch {
-        // ignore
+
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume().catch(() => {});
+        }
+
+        // Play a tiny silent buffer to fully unlock the audio system
+        if (audioContext) {
+            try {
+                const buffer = audioContext.createBuffer(1, 1, 22050);
+                const src = audioContext.createBufferSource();
+                src.buffer = buffer;
+                src.connect(audioContext.destination);
+                src.start(0);
+                try { src.stop(); } catch {}
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        // Fallback: play/pause a few cached HTMLAudioElements silently.
+        try {
+            const filesToUnlock = [AUDIO_FILES.nightStart, AUDIO_FILES.closeEyes, AUDIO_FILES.nightEnd];
+            for (const file of filesToUnlock) {
+                try {
+                    const a = getCachedAudioElement(file);
+                    a.volume = 0;
+                    a.pause();
+                    a.currentTime = 0;
+                    const p = a.play();
+                    if (p && typeof p.then === 'function') {
+                        p.then(() => { try { a.pause(); a.currentTime = 0; } catch {} }).catch(() => { try { a.pause(); a.currentTime = 0; } catch {} });
+                    }
+                } catch {
+                    // ignore individual file unlock failures
+                }
+            }
+        } catch {}
+
+        audioUnlocked = true;
+        console.log('Audio unlocked via user gesture');
+    } catch (err) {
+        console.log('Audio unlock attempt failed', err);
     }
 
-    try {
-        document.removeEventListener('touchstart', unlockAudioOnUserGesture, { passive: true });
-    } catch {}
-    try {
-        document.removeEventListener('click', unlockAudioOnUserGesture);
-    } catch {}
+    // Remove listeners after first use
+    try { document.removeEventListener('touchstart', unlockAudioOnUserGesture, { passive: true }); } catch {}
+    try { document.removeEventListener('click', unlockAudioOnUserGesture); } catch {}
 }
+
+// Also register early in case the user interacts before setupEventListeners runs
+try { document.addEventListener('touchstart', unlockAudioOnUserGesture, { passive: true }); } catch {}
+try { document.addEventListener('click', unlockAudioOnUserGesture); } catch {}
 
 // Initialize roles (can be expanded to load from JSON or API)
 function initializeRoles() {
