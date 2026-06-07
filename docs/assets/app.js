@@ -700,7 +700,7 @@ async function startNightPhaseFromDay() {
     await maybePlayBackgroundMusic();
 
     // Show first role
-    showCurrentRole();
+   await showCurrentRole();
 }
 
 // New game - return to role selection
