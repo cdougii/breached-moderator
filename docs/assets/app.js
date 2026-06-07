@@ -624,7 +624,7 @@ async function goToNextStep() {
     }
 
     currentRoleIndex++;
-    showCurrentRole();
+    await showCurrentRole();
     if (nextRoleBtn) nextRoleBtn.disabled = false;
     if (endNightPhaseBtn) endNightPhaseBtn.disabled = false;
     isTransitioning = false;
