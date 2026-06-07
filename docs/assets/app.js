@@ -3,7 +3,7 @@ const roles = [
     { name: "Bodyguard", order: 1, instructions: "Place a token of protection on a player's card. This card cannot be tampered with tonight." },
     { name: "Captain", order: 2, instructions: "Look at a player's card and swap it with a card from the centre of the opposite colour." },
     { name: "Scientist", order: 3, instructions: "Look at another player's card to learn their identity. Then return it face down." },
-    { name: "Technician", order: 4, instructions: "Flip a face down card face up and a face up card face down." },
+    { name: "Technician", order: 4, instructions: "From the cards in the center, flip a face down card face up and a face up card face down." },
     { name: "Saboteur", order: 5, instructions: "Flip over another player's card, revealing their identity to everyone." },
 ];
 
@@ -502,7 +502,7 @@ function setTeam(container, team) {
 }
 
 // Show current role and instructions
-function showCurrentRole() {
+async function showCurrentRole() {
     if (currentRoleIndex >= nightPhaseRoles.length) {
         return;
     }
@@ -534,10 +534,13 @@ function showCurrentRole() {
         endNightPhaseBtn.style.display = 'none';
     }
 
-    startRoleTimer();
-
     // Role voice over (team-specific preferred, then generic)
-    playFirstAvailableAudio(getRoleAudioCandidates(currentRole.name, currentRole.team));
+    await playFirstAvailableAudio(
+        getRoleAudioCandidates(currentRole.name, currentRole.team)
+    );
+
+    // Start the timer
+    startRoleTimer();
 }
 
 function clearRoleTimer() {
