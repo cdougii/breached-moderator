@@ -313,6 +313,9 @@ async function maybePlayBackgroundMusic() {
 // Initialize the app
 function initializeApp() {
     initializeRoles();
+
+    preloadAudio();
+
     renderRoleSelection();
     setupEventListeners();
     updateSettingsUi();
@@ -793,4 +796,18 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
     initializeApp();
+}
+
+function preloadAudio() {
+    Object.values(AUDIO_FILES).forEach(file => {
+        getCachedAudioElement(file);
+    });
+
+    roles.forEach(role => {
+        const slug = sanitizeRoleNameForFilename(role.name);
+
+        getCachedAudioElement(`role_${slug}_human.mp3`);
+        getCachedAudioElement(`role_${slug}_alien.mp3`);
+        getCachedAudioElement(`role_${slug}.mp3`);
+    });
 }
