@@ -14,6 +14,7 @@ let allNightPhaseRoles = []; // Store all possible roles for filtering
 let currentRoleIndex = 0;
 let isNightPhaseActive = false;
 let activeTeams = { human: true, alien: true }; // Track which teams are active
+let roleDisplayToken = 0;
 
 // Timer Settings
 const DEFAULT_SETTINGS = {
@@ -503,6 +504,8 @@ function setTeam(container, team) {
 
 // Show current role and instructions
 async function showCurrentRole() {
+    const myToken = ++roleDisplayToken;
+
     if (currentRoleIndex >= nightPhaseRoles.length) {
         return;
     }
@@ -534,11 +537,19 @@ async function showCurrentRole() {
         endNightPhaseBtn.style.display = 'none';
     }
 
+    // Give mobile browsers a chance to render the screen first
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
     // Role voice over (team-specific preferred, then generic)
     await playFirstAvailableAudio(
         getRoleAudioCandidates(currentRole.name, currentRole.team)
     );
 
+    if (myToken !== roleDisplayToken) {
+        return;
+    }
+    
+    // If the token has changed since we started, stop here
     // Start the timer
     startRoleTimer();
 }
